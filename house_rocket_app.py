@@ -23,7 +23,7 @@ data = get_data('datasets/kc_house_data.csv')
 # Filter bedrooms
 bedrooms = st.sidebar.multiselect('Number of Bedrooms', data['bedrooms'].unique())
 
-st.write('Your filter is: ', bedrooms[0])
+st.write('Your filter is: ', bedrooms)
 
 # Plot Map
 st.title('House Rocket Map')

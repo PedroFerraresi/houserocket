@@ -40,7 +40,7 @@ def overview_data(data):
 
     st.dataframe(data)
 
-    c1, c2 = st.beta_columns((1, 1.5))
+    c1, c2 = st.columns((1, 1.5))
 
     df1 = data[['id', 'zipcode']].groupby('zipcode').count().reset_index()
     df2 = data[['price', 'zipcode']].groupby('zipcode').mean().reset_index()
@@ -77,7 +77,7 @@ def overview_data(data):
 def portifolio_desinty(data, geofile):
     st.title('Region Overview')
 
-    c1, c2 = st.beta_columns((1, 1))
+    c1, c2 = st.columns((1, 1))
     c1.header('Portifolio Density')
 
     df = data.sample(100)
@@ -201,7 +201,7 @@ def attributes_distributions(data):
     st.sidebar.subheader('Has Water View?')
     f_waterview = st.sidebar.checkbox('Yes')
 
-    c1, c2 = st.beta_columns((1, 1))
+    c1, c2 = st.columns((1, 1))
 
     c1.header('Houses per Bedrooms')
     df = data[data['bedrooms'] < f_bedrooms]
@@ -215,7 +215,7 @@ def attributes_distributions(data):
     fig = px.histogram(df, x='bathrooms', nbins=19)
     c2.plotly_chart(fig, use_container_width=True)
 
-    c1, c2 = st.beta_columns((1, 1))
+    c1, c2 = st.columns((1, 1))
 
     c1.header('Houses per Floors')
     df = data[data['floors'] <= f_floors]
