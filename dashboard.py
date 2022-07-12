@@ -1,77 +1,20 @@
+import os
+import folium
+import geopandas
+
 import streamlit      as st
 import pandas         as pd
 import numpy          as np
 import plotly.express as px
-import folium
-import geopandas
 
-from datetime         import datetime
-from folium.plugins   import MarkerCluster
-from streamlit_folium import folium_static
+from datetime          import datetime
+from folium.plugins    import MarkerCluster
+from streamlit_folium  import folium_static
+
+from scripts           import data_functions      as defs
+from scripts           import streamlit_functions  as stf
 
 st.set_page_config(layout='wide')
-
-@st.cache(allow_output_mutation=True)
-def load_dataset(path):
-    return pd.read_csv(path)
-
-@st.cache(allow_output_mutation=True)
-def create_price_m2_feature(data):
-    data['price_m2'] = data['price'] / (data['sqft_lot'] * 0.092903)
-
-    return data
-
-def overview_data(data):
-    st.sidebar.title('Dataframe Options')
-
-    f_attributes = st.sidebar.multiselect('Choose Columns', data.columns)
-    f_zipcodes = st.sidebar.multiselect('Choose Zipcode', data['zipcode'].unique())
-
-    st.title('Data Overview')
-
-    if (f_attributes != []) & (f_zipcodes != []):
-        data = data.loc[data['zipcode'].isin(f_zipcodes), f_attributes]
-    elif (f_attributes != []) & (f_zipcodes == []):
-        data = data.loc[:, f_attributes]
-    elif (f_attributes == []) & (f_zipcodes != []):
-        data = data.loc[data['zipcode'].isin(f_zipcodes), :]
-    else:
-        data = data.copy()
-
-    st.dataframe(data)
-
-    c1, c2 = st.columns((1, 1.5))
-
-    df1 = data[['id', 'zipcode']].groupby('zipcode').count().reset_index()
-    df2 = data[['price', 'zipcode']].groupby('zipcode').mean().reset_index()
-    df3 = data[['sqft_living', 'zipcode']].groupby('zipcode').mean().reset_index()
-    df4 = data[['price_m2', 'zipcode']].groupby('zipcode').mean().reset_index()
-
-    m1 = pd.merge(df1, df2, on='zipcode', how='inner')
-    m2 = pd.merge(m1, df3, on='zipcode', how='inner')
-    df = pd.merge(m2, df4, on='zipcode', how='inner')
-
-    df.columns = ['zipcode', 'total_houses', 'price', 'sqft_living', 'price_m2']
-
-    c1.header('Average Values')
-    c1.dataframe(df)
-
-    num_atributes = data.select_dtypes(include=['int64', 'float64'])
-
-    mean = pd.DataFrame(num_atributes.apply(np.mean))
-    median = pd.DataFrame(num_atributes.apply(np.median))
-    std = pd.DataFrame(num_atributes.apply(np.std))
-    min_ = pd.DataFrame(num_atributes.apply(np.min))
-    max_ = pd.DataFrame(num_atributes.apply(np.max))
-
-    df1 = pd.concat([max_, min_, mean, median, std], axis=1).reset_index()
-
-    df1.columns = ['attributes', 'max', 'min', 'mean', 'median', 'std']
-
-    c2.header('Descriptive Analysis')
-    c2.dataframe(df1)
-
-    return None
 
 
 def portifolio_desinty(data, geofile):
@@ -238,24 +181,26 @@ def attributes_distributions(data):
 if __name__ == '__main__':
     # ETL
     # Extraction
-    path = './datasets/Zip_Codes.geojson'
+    if os.path.isfile('./datasets/Zip_Codes.geojson'):
+        geo_data = geopandas.read_file('./datasets/Zip_Codes.geojson')
 
-    data = load_dataset('datasets/kc_house_data.csv')
-    geofile = geopandas.read_file(path)
+        if os.path.isfile('datasets/kc_house_data.csv'):
+            df = defs.load_dataset('datasets/kc_house_data.csv')
 
-    # Transformation
-    # Creating price/m2 feature
-    data = create_price_m2_feature(data)
+            # Creating Overview Data Section
+            stf.overview_data_section(df)
 
-    # Creating Overview Data Section
-    overview_data(data)
+            # # Creating Portifolio Density Section
+            # portifolio_desinty(df, geo_data)
 
-    # Creating Portifolio Density Section
-    portifolio_desinty(data, geofile)
+            # # Creating Commercial Section
+            # comercial(df)
 
-    # Creating Commercial Section
-    comercial(data)
+            # # Creating Distributions
+            # attributes_distributions(df)
 
-    # Creating Distributions
-    attributes_distributions(data)
+        else:
+            st.title('CSV File is missing.')
+    else:
+        st.title('GEO Data File is missing.')
 
