@@ -1,74 +1,17 @@
 import os
-import folium
 import geopandas
 
 import streamlit      as st
 import pandas         as pd
-import numpy          as np
 import plotly.express as px
 
 from datetime          import datetime
-from folium.plugins    import MarkerCluster
-from streamlit_folium  import folium_static
+
 
 from scripts           import data_functions      as defs
-from scripts           import streamlit_functions  as stf
+from scripts           import streamlit_structure  as stf
 
 st.set_page_config(layout='wide')
-
-
-def portifolio_desinty(data, geofile):
-    st.title('Region Overview')
-
-    c1, c2 = st.columns((1, 1))
-    c1.header('Portifolio Density')
-
-    df = data.sample(100)
-
-    density_map = folium.Map(location=[data['lat'].mean(), data['long'].mean()], default_zoom_start=15)
-
-    marker_cluster = MarkerCluster().add_to(density_map)
-
-    for name, row in df.iterrows():
-        folium.Marker([row['lat'], row['long']],
-                      popup='Sold R${0} on: {1}. Features: {2} sqft, {3} bedrooms, {4} bathrooms, year built: {5}'
-                      .format(row['price'],
-                              row['date'],
-                              row['sqft_living'],
-                              row['bedrooms'],
-                              row['bathrooms'],
-                              row['yr_built'])
-                      ).add_to(marker_cluster)
-
-    with c1:
-        folium_static(density_map)
-
-    c2.header('Price Density')
-
-    df = data[['price', 'zipcode']].groupby('zipcode').mean().reset_index()
-    df.columns = ['zip', 'mean_price']
-
-    df = df.sample(10)
-
-    geofile = geofile[geofile['ZIP'].isin(df['zip'].tolist())]
-
-    region_price_map = folium.Map(location=[data['lat'].mean(), data['long'].mean()], default_zoom_start=15)
-
-    region_price_map.choropleth(
-        data=df,
-        geo_data=geofile,
-        columns=['zip', 'mean_price'],
-        key_on='feature.properties.ZIP',
-        fill_color='YlOrRd',
-        fill_opacity=0.7,
-        line_opacity=0.2,
-        legend_name='AVG Price'
-    )
-
-    with c2:
-        folium_static(region_price_map)
-
-    return None
 
 
 def comercial(data):
@@ -188,19 +131,20 @@ if __name__ == '__main__':
             df = defs.load_dataset('datasets/kc_house_data.csv')
 
             # Creating Overview Data Section
-            stf.overview_data_section(df)
+            stf.create_overview_data_section(df)
 
-            # # Creating Portifolio Density Section
-            # portifolio_desinty(df, geo_data)
+            # Creating Portifolio Density Section
+            stf.create_portifolio_desinty_section(df, geo_data)
 
-            # # Creating Commercial Section
-            # comercial(df)
+            # TODO:
+            # Creating Commercial Section
+            comercial(df)
 
             # # Creating Distributions
             # attributes_distributions(df)
 
         else:
-            st.title('CSV File is missing.')
+            st.title('Data File (CSV) is missing.')
     else:
         st.title('GEO Data File is missing.')
 
