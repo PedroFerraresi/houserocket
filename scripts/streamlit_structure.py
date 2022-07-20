@@ -1,10 +1,12 @@
+from os import ctermid
 import streamlit  as st
 
 from streamlit_folium  import folium_static
 
-from . import data_overview   as dto
-from . import data_functions  as defs
-from . import region_overview as rgo
+from . import data_functions           as defs
+from . import st_data_overview         as dto
+from . import st_region_overview       as rgo
+from . import st_commercial_attributes as cat
 
 
 def create_overview_data_section(dataframe):
@@ -56,5 +58,21 @@ def create_portifolio_desinty_section(data, geofile):
 
     with c2:
         folium_static(region_price_map)
+
+    return None
+
+
+def create_commercial_attributes_section(data):
+    st.title('Commercial Attributes')
+
+    st.sidebar.title('Commercial Attributes Options')
+
+    st.header('Avg Price per Year')
+
+    cat.create_avg_price_per_year_plot(data)
+
+    st.header('Avg Price per Day')
+
+    cat.create_avg_price_per_day_plot(data)
 
     return None

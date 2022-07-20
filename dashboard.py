@@ -2,55 +2,14 @@ import os
 import geopandas
 
 import streamlit      as st
-import pandas         as pd
 import plotly.express as px
 
-from datetime          import datetime
 
+from scripts    import data_functions      as defs
+from scripts    import streamlit_structure  as stf
 
-from scripts           import data_functions      as defs
-from scripts           import streamlit_structure  as stf
 
 st.set_page_config(layout='wide')
-
-
-def comercial(data):
-    st.sidebar.title('Commercial Options')
-
-    st.title('Commercial Attributes')
-
-    data['date'] = pd.to_datetime(data['date']).dt.strftime('%Y-%m-%d')
-
-    st.header('Avg Price per Year')
-
-    min_yr_built = int(data['yr_built'].min())
-    max_yr_built = int(data['yr_built'].max())
-
-    st.sidebar.subheader('Select Max Year Built')
-    f_yr_built = st.sidebar.slider('Year Built', min_yr_built, max_yr_built, int(data['yr_built'].mean()))
-
-    df = data.loc[data['yr_built'] < f_yr_built]
-    df = df[['yr_built', 'price']].groupby('yr_built').mean().reset_index()
-
-    fig = px.line(df, x='yr_built', y='price')
-    st.plotly_chart(fig, use_container_width=True)
-
-    st.header('Avg Price per Day')
-
-    min_date = datetime.strptime(data['date'].min(), '%Y-%m-%d')
-    max_date = datetime.strptime(data['date'].max(), '%Y-%m-%d')
-
-    st.sidebar.subheader('Select Max Date')
-    f_date = st.sidebar.slider('Date', min_date, max_date, datetime.strptime('2014-12-01', '%Y-%m-%d'))
-
-    data['date'] = pd.to_datetime(data['date'])
-    df = data.loc[data['date'] < f_date]
-    df = df[['date', 'price']].groupby('date').mean().reset_index()
-
-    fig = px.line(df, x='date', y='price')
-    st.plotly_chart(fig, use_container_width=True)
-
-    return None
 
 
 def attributes_distributions(data):
@@ -136,10 +95,10 @@ if __name__ == '__main__':
             # Creating Portifolio Density Section
             stf.create_portifolio_desinty_section(df, geo_data)
 
-            # TODO:
             # Creating Commercial Section
-            comercial(df)
+            stf.create_commercial_attributes_section(df)
 
+            # TODO:
             # # Creating Distributions
             # attributes_distributions(df)
 

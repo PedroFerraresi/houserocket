@@ -21,7 +21,9 @@ def load_dataset(path):
     """
     dataframe = pd.read_csv(path)
 
-    dataframe['date'] = pd.to_datetime(dataframe['date']).dt.strftime('%Y-%m-%d')
+    dataframe['date'] = dataframe['date'].apply(lambda x: x.split('T')[0])
+
+    dataframe['date'] = pd.to_datetime(dataframe['date']).dt.date
 
     return create_price_m2_feature(dataframe)
 
