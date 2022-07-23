@@ -5,7 +5,7 @@ from datetime          import datetime
 
 
 def create_sidebar_avg_price_year_filter(data):
-    st.sidebar.subheader('Select Years Range')
+    st.sidebar.subheader('Years Range')
 
     values = data["yr_built"].unique().tolist()
 
@@ -21,7 +21,7 @@ def create_sidebar_avg_price_year_filter(data):
 
 
 def create_avg_price_day_filter(data):
-    st.sidebar.subheader('Select Days Range')
+    st.sidebar.subheader('Days Range')
 
     f_min_date = data['date'].min()
 
