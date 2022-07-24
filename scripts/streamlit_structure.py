@@ -3,10 +3,11 @@ import streamlit  as st
 
 from streamlit_folium  import folium_static
 
-from . import data_functions           as defs
-from . import st_data_overview         as dto
-from . import st_region_overview       as rgo
-from . import st_commercial_attributes as cat
+from . import data_functions            as defs
+from . import st_data_overview          as dto
+from . import st_region_overview        as rgo
+from . import st_commercial_attributes  as cat
+from . import st_distributions_overview as dio
 
 
 def create_overview_data_section(dataframe):
@@ -76,3 +77,10 @@ def create_commercial_attributes_section(data):
     cat.create_avg_price_per_day_plot(data)
 
     return None
+
+
+def create_distribuition_overview_section(data):    
+    st.title('Distributions')
+    st.header('Price Distribution')
+    
+    # dio.createdistribuition_overview(data)

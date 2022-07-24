@@ -100,7 +100,8 @@ if __name__ == '__main__':
 
             # TODO:
             # # Creating Distributions
-            # attributes_distributions(df)
+            attributes_distributions(df)
+            # stf.create_distribuition_overview_section(df)
 
         else:
             st.title('Data File (CSV) is missing.')
