@@ -99,9 +99,8 @@ if __name__ == '__main__':
             stf.create_commercial_attributes_section(df)
 
             # TODO:
-            # # Creating Distributions
-            attributes_distributions(df)
-            # stf.create_distribuition_overview_section(df)
+            # Creating Distributions
+            stf.create_distribuition_overview_section(df)
 
         else:
             st.title('Data File (CSV) is missing.')

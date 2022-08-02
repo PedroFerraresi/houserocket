@@ -52,7 +52,6 @@ def create_portifolio_desinty_section(data, geofile):
     with c1:
         folium_static(density_map)
 
-
     c2.header('Price Density')
 
     region_price_map = rgo.create_price_region_map(data, geofile)
@@ -83,4 +82,17 @@ def create_distribuition_overview_section(data):
     st.title('Distributions')
     st.header('Price Distribution')
     
-    # dio.createdistribuition_overview(data)
+    min_price, max_price = dio.create_price_distribuition_filter(data)
+    
+    dio.create_price_distribuition_plot(data, min_price, max_price)
+    
+    qty_bedrooms, qty_bathrooms = dio.create_bedrooms_bathrroms_distribuition_filter(data)
+    
+    dio.create_bedrooms_bathrroms_distribuition_plots(data, qty_bedrooms, qty_bathrooms)
+    
+    qty_floors, is_waterview = dio.create_floors_waterfront_distribuition_filters(data)
+    
+    dio.create_floors_waterfront_distribuition_plots(data, qty_floors, is_waterview)
+    
+    return None
+
