@@ -106,4 +106,3 @@ if __name__ == '__main__':
             st.title('Data File (CSV) is missing.')
     else:
         st.title('GEO Data File is missing.')
-
