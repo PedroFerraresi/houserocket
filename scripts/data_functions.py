@@ -24,6 +24,12 @@ def load_dataset(path):
     dataframe['date'] = dataframe['date'].apply(lambda x: x.split('T')[0])
 
     dataframe['date'] = pd.to_datetime(dataframe['date']).dt.date
+    
+    dataframe = dataframe.loc[dataframe['bedrooms'] > 0, :]
+    dataframe = dataframe.loc[dataframe['bedrooms'] < 33, :]
+    dataframe = dataframe.loc[dataframe['bathrooms'] > 0, :]
+    
+    dataframe = dataframe.drop_duplicates()
 
     return create_price_m2_feature(dataframe)
 
