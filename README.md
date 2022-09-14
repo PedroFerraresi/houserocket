@@ -23,7 +23,7 @@ Entretanto, as casas possuem muitos atributos que as tornam mais ou menos atrati
 Dessa forma, o objetivo desse projeto é responder as seguintes perguntas utilizando Análise Exploratória de Dados:
 
 1. Quais casas o CEO da House Rocket deveria comprar e por qual preço de compra?
-2. Uma vez a casa em posse da empresa, qual o melhor momento para vendê-las e qual seria o preço da venda?
+2. Uma vez a casa em posse da empresa, qual o melhor momento para vendê-la e qual seria o preço da venda?
 
 # 2. Premissas de Negócio
 ## 2.1. Os dados
@@ -100,7 +100,7 @@ As colunas da base de dados são:
 ### 3.2.1. Quais são os imóveis que a House Rocket deveria comprar e por qual preço ?
 Foi realizado o agrupamento dos imóveis por código postal e calculado o valor mediano do preço de venda de cada código postal. A partir disso, foram selecionados os imóveis que possuiam o valor de venda menor que o valor mediano e que estavam em boa condições, gerando assim uma lista com **21.419** imóveis elegíveis para compra.
 
-### 3.2.2. Uma vez a casa comprada, qual o melhor momento para vendê-las e por qual preço ?
+### 3.2.2. Uma vez a casa comprada, qual o melhor momento para vendê-la e por qual preço ?
 A partir dos imóveis selecionados anteriormente, foi verificado a estação do ano em que cada imóvel foi vendido. Novamente, agrupando os dados por código postal e por estação do ano, foi calculado o valor mediano de venda do imóvel. Com o valor mediano calculado, foi selecionado o menor valor mediano de cada estação como base e realizado o cálculo do valor sugerido de venda para os 21.419 imóveis a partir das regras colocadas anteriormente.
 
 Caso a sugestão de valores de venda seja acatada, o lucro previsto com a venda dos imóveis será de **$ 1.460.518.541,70**
